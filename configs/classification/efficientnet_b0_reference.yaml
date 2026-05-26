@@ -1,0 +1,38 @@
+run_name: classifier_efficientnet_b0_reference
+index_csv: data/processed/hyperkvasir_index.csv
+output_dir: models/checkpoints/classifier_efficientnet_b0_reference
+
+backbone: efficientnet_b0
+image_size: 256
+batch_size: 8
+num_workers: 4
+epochs: 45
+learning_rate: 0.0001
+min_learning_rate: 0.000001
+weight_decay: 0.0001
+scheduler: cosine
+label_smoothing: 0.03
+mixed_precision: true
+seed: 146
+pretrained: true
+early_stopping_patience: 10
+augment_level: standard
+
+classes:
+  - cecum
+  - dyed-lifted-polyps
+  - dyed-resection-margins
+  - esophagitis-a
+  - esophagitis-b-d
+  - polyps
+  - pylorus
+  - ulcerative-colitis-grade-1
+  - ulcerative-colitis-grade-2
+  - z-line
+
+clinical_target:
+  name: polyp_family
+  display_name: polyp family
+  positive_classes:
+    - polyps
+    - dyed-lifted-polyps

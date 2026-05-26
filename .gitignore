@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.env
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Data
+data/raw/*
+data/interim/*
+data/processed/*.csv
+data/processed/*.parquet
+data/reports/
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Local model and experiment outputs
+/models/
+/outputs/
+/logs/
+
+# Local scratch material
+/scratch/
+/notebooks/
+/app/
+
+# Media and reports generated outside the package
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.pdf
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,30 @@
+# Core
+numpy
+pandas
+scikit-learn
+pillow
+opencv-python-headless
+matplotlib
+plotly
+tqdm
+rich
+pyyaml
+tabulate
+
+# Deep learning
+torch
+torchvision
+torchaudio
+timm
+albumentations
+segmentation-models-pytorch
+
+# Explainability (PyPI package is `grad-cam`, imported as `pytorch_grad_cam`)
+grad-cam
+
+# Video
+imageio
+imageio-ffmpeg
+
+# Testing
+pytest

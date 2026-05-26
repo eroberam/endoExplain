@@ -1,0 +1,36 @@
+run_name: seg_unetpp_effb1_384_recall
+index_csv: data/processed/hyperkvasir_segmented_index.csv
+output_dir: models/checkpoints/seg_unetpp_effb1_384_recall
+
+architecture: UnetPlusPlus
+encoder_name: efficientnet-b1
+encoder_weights: imagenet
+image_size: 384
+batch_size: 4
+num_workers: 4
+epochs: 50
+learning_rate: 0.0002
+min_learning_rate: 0.000001
+weight_decay: 0.0001
+scheduler: cosine
+mixed_precision: true
+seed: 53
+early_stopping_patience: 14
+val_fraction: 0.15
+test_fraction: 0.15
+augment_level: strong
+normalize: true
+max_grad_norm: 1.0
+
+loss_bce_weight: 0.35
+loss_dice_weight: 1.0
+loss_focal_weight: 0.35
+loss_tversky_weight: 0.5
+loss_tversky_alpha: 0.3
+loss_tversky_beta: 0.7
+
+recommended_threshold: 0.6
+threshold_grid:
+  start: 0.25
+  stop: 0.85
+  step: 0.05

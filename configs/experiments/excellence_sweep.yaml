@@ -1,0 +1,207 @@
+name: excellence_sweep
+description: Append-only professional sweep for recovering and improving classifier/segmenter champions.
+
+classification:
+  defaults:
+    index_csv: data/processed/hyperkvasir_index.csv
+    image_size: 256
+    batch_size: 4
+    num_workers: 4
+    epochs: 45
+    learning_rate: 0.00005
+    mixed_precision: true
+    max_samples_per_class: null
+    pretrained: true
+    early_stopping_patience: 10
+    scheduler: cosine
+    label_smoothing: 0.03
+    weight_decay: 0.0001
+    augment_level: standard
+  grids:
+    - backbone: convnext_tiny
+      image_size: 256
+      batch_size: 4
+      seeds: [45, 145, 245]
+      learning_rates: [0.00005, 0.00003]
+      augment_levels: [standard]
+    - backbone: efficientnet_b0
+      image_size: 256
+      batch_size: 8
+      seeds: [46, 146, 246]
+      learning_rates: [0.00005, 0.0001]
+      augment_levels: [standard]
+    - backbone: resnet34
+      image_size: 256
+      batch_size: 8
+      seeds: [47, 147, 247]
+      learning_rates: [0.0001, 0.00005]
+      augment_levels: [standard]
+    - backbone: resnet18
+      image_size: 256
+      batch_size: 8
+      seeds: [48, 148]
+      learning_rates: [0.0001]
+      augment_levels: [standard]
+    - backbone: deit_tiny_patch16_224
+      image_size: 224
+      batch_size: 4
+      seeds: [49, 149]
+      learning_rates: [0.00005]
+      augment_levels: [standard]
+    - backbone: vit_tiny_patch16_224
+      image_size: 224
+      batch_size: 4
+      seeds: [50, 150]
+      learning_rates: [0.00005]
+      augment_levels: [standard]
+    - backbone: swin_tiny_patch4_window7_224
+      image_size: 224
+      batch_size: 4
+      seeds: [55]
+      learning_rates: [0.00003]
+      augment_levels: [standard]
+  experiments:
+    - name: convnext_tiny_img256_s45_lr5e-5_strong
+      params:
+        backbone: convnext_tiny
+        image_size: 256
+        batch_size: 4
+        seed: 45
+        learning_rate: 0.00005
+        augment_level: strong
+    - name: convnext_tiny_img256_s145_lr3e-5_strong
+      params:
+        backbone: convnext_tiny
+        image_size: 256
+        batch_size: 4
+        seed: 145
+        learning_rate: 0.00003
+        augment_level: strong
+    - name: efficientnet_b0_img256_s46_lr5e-5_strong
+      params:
+        backbone: efficientnet_b0
+        image_size: 256
+        batch_size: 8
+        seed: 46
+        learning_rate: 0.00005
+        augment_level: strong
+
+segmentation:
+  defaults:
+    index_csv: data/processed/hyperkvasir_segmented_index.csv
+    batch_size: 4
+    num_workers: 4
+    epochs: 70
+    learning_rate: 0.0002
+    mixed_precision: true
+    max_samples: null
+    early_stopping_patience: 14
+    val_fraction: 0.15
+    test_fraction: 0.15
+    encoder_weights: imagenet
+    augment_level: light
+    normalize: true
+    scheduler: cosine
+    weight_decay: 0.0001
+    max_grad_norm: 1.0
+    threshold_min: 0.25
+    threshold_max: 0.85
+    threshold_steps: 13
+  loss_profiles:
+    balanced:
+      loss_bce_weight: 0.50
+      loss_dice_weight: 1.00
+      loss_focal_weight: 0.15
+      loss_tversky_weight: 0.00
+    recall:
+      loss_bce_weight: 0.35
+      loss_dice_weight: 1.00
+      loss_focal_weight: 0.35
+      loss_tversky_weight: 0.50
+      loss_tversky_alpha: 0.30
+      loss_tversky_beta: 0.70
+    tight:
+      loss_bce_weight: 0.70
+      loss_dice_weight: 1.00
+      loss_focal_weight: 0.20
+      loss_tversky_weight: 0.25
+      loss_tversky_alpha: 0.50
+      loss_tversky_beta: 0.50
+  grids:
+    - architecture: UnetPlusPlus
+      encoder_name: efficientnet-b1
+      image_size: 384
+      seeds: [53, 153, 253]
+      profiles: [balanced, recall]
+      augment_levels: [light]
+      params: {epochs: 80}
+    - architecture: DeepLabV3Plus
+      encoder_name: resnet34
+      image_size: 352
+      seeds: [43, 143, 243]
+      profiles: [balanced, recall]
+      augment_levels: [light]
+      params: {epochs: 65}
+    - architecture: FPN
+      encoder_name: efficientnet-b1
+      image_size: 384
+      seeds: [52, 152]
+      profiles: [balanced, recall]
+      augment_levels: [light]
+      params: {epochs: 65}
+    - architecture: MAnet
+      encoder_name: efficientnet-b1
+      image_size: 384
+      seeds: [54, 154]
+      profiles: [balanced, recall]
+      augment_levels: [light]
+      params: {epochs: 65}
+    - architecture: UnetPlusPlus
+      encoder_name: efficientnet-b0
+      image_size: 384
+      seeds: [42, 142]
+      profiles: [balanced]
+      augment_levels: [light]
+      params: {epochs: 80}
+    - architecture: Unet
+      encoder_name: resnet34
+      image_size: 352
+      seeds: [44, 144]
+      profiles: [balanced, tight]
+      augment_levels: [light]
+      params: {epochs: 65}
+    - architecture: Segformer
+      encoder_name: mit_b0
+      image_size: 352
+      seeds: [51, 151]
+      profiles: [balanced]
+      augment_levels: [light]
+      params: {epochs: 65}
+  experiments:
+    - name: UnetPlusPlus_efficientnet-b1_img384_s53_recall_strong
+      profile: recall
+      params:
+        architecture: UnetPlusPlus
+        encoder_name: efficientnet-b1
+        image_size: 384
+        seed: 53
+        augment_level: strong
+        epochs: 80
+    - name: UnetPlusPlus_efficientnet-b1_img384_s153_balanced_strong
+      profile: balanced
+      params:
+        architecture: UnetPlusPlus
+        encoder_name: efficientnet-b1
+        image_size: 384
+        seed: 153
+        augment_level: strong
+        epochs: 80
+    - name: FPN_efficientnet-b1_img384_s52_recall_strong
+      profile: recall
+      params:
+        architecture: FPN
+        encoder_name: efficientnet-b1
+        image_size: 384
+        seed: 52
+        augment_level: strong
+        epochs: 65

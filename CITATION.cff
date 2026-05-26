@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "EndoExplain: Spatial and Temporal Explainability for AI-Assisted Colonoscopy Review"
+authors:
+  - family-names: "Alcaraz Machado"
+    given-names: "Roberto"
+    orcid: "https://orcid.org/0009-0009-1551-7794"
+email: "eroberam@gmail.com"
+version: "0.1.0"
+date-released: "2026-05-25"
+license: "MIT"
+repository-code: "https://github.com/eroberam/endoExplain"
+type: software

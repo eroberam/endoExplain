@@ -1,0 +1,49 @@
+project:
+  name: EndoExplain
+  clinical_target: polyp_family
+  disclaimer: Research prototype. Not for diagnosis or patient care.
+
+paths:
+  dataset_root: data/raw/hyper-kvasir
+  image_index: data/processed/hyperkvasir_index.csv
+  segmentation_index: data/processed/hyperkvasir_segmented_index.csv
+  checkpoints_dir: models/checkpoints
+  experiments_dir: models/experiments
+  outputs_dir: outputs
+  figures_dir: outputs/figures
+  metrics_dir: outputs/metrics
+  videos_dir: outputs/videos
+  logs_dir: logs
+
+labels:
+  classification:
+    - cecum
+    - dyed-lifted-polyps
+    - dyed-resection-margins
+    - esophagitis-a
+    - esophagitis-b-d
+    - polyps
+    - pylorus
+    - ulcerative-colitis-grade-1
+    - ulcerative-colitis-grade-2
+    - z-line
+  polyp_family:
+    display_name: polyp family
+    positive_classes:
+      - polyps
+      - dyed-lifted-polyps
+
+demo:
+  video_path: data/raw/hyper-kvasir/labeled-videos/lower-gi-tract/pathological-findings/polyps/11305ea5-389a-46c8-95f3-94a1af84247d.avi
+  output_path: outputs/videos/11305_polyp_family_overlay.mp4
+  confidence_threshold: 0.85
+  mask_threshold: 0.75
+  mask_min_confidence: 0.85
+  mask_max_area_ratio: 0.18
+  mask_min_component_area_ratio: 0.015
+  mask_keep_largest_components: 1
+  mask_fade_frames: 0
+  mask_only_in_event: true
+  heatmap_method: gradcam++
+  heatmap_alpha: 0.20
+  heatmap_top_percent: 0.16

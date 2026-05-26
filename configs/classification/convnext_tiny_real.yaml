@@ -1,0 +1,33 @@
+run_name: classifier_convnext_tiny_real
+index_csv: data/processed/hyperkvasir_index.csv
+output_dir: models/checkpoints/classifier_convnext_tiny_real
+
+backbone: convnext_tiny
+image_size: 256
+batch_size: 4
+num_workers: 4
+epochs: 30
+learning_rate: 0.00005
+mixed_precision: true
+seed: 45
+pretrained: true
+early_stopping_patience: 8
+
+classes:
+  - cecum
+  - dyed-lifted-polyps
+  - dyed-resection-margins
+  - esophagitis-a
+  - esophagitis-b-d
+  - polyps
+  - pylorus
+  - ulcerative-colitis-grade-1
+  - ulcerative-colitis-grade-2
+  - z-line
+
+clinical_target:
+  name: polyp_family
+  display_name: polyp family
+  positive_classes:
+    - polyps
+    - dyed-lifted-polyps
