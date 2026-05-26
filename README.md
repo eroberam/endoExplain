@@ -8,6 +8,14 @@ quality indicators and a cockpit-style video overlay.
 This project is for research and education only. It is not a medical device
 and must not be used for diagnosis, treatment decisions or patient care.
 
+## Demo Preview
+
+![EndoExplain review cockpit frame](docs/assets/demo_frame_615.jpg)
+
+Qualitative frame from a public HyperKvasir video, rendered locally with the
+EndoExplain review overlay. Demo videos are intended for release assets, not
+for Git tracking.
+
 ## Install
 
 The validated environment is WSL2 Ubuntu with conda Python 3.10.
