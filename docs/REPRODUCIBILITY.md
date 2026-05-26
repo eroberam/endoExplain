@@ -108,3 +108,32 @@ python scripts/07_render_demo_video.py \
   --confidence_threshold 0.85 \
   --method "gradcam++"
 ```
+
+## Quality, Intervals And Temporal Benchmark
+
+Add lightweight quality strata to any exported metrics CSV:
+
+```bash
+python scripts/18_export_quality_strata.py \
+  --input_csv outputs/metrics/classifier_predictions/<run>/predictions_test.csv
+```
+
+Compute percentile bootstrap intervals:
+
+```bash
+python scripts/20_bootstrap_metric_intervals.py \
+  --kind classification \
+  --input_csv outputs/metrics/classifier_predictions/<run>/predictions_test.csv \
+  --n_boot 5000
+```
+
+The temporal benchmark manifest is in `configs/evaluation/`. Positive videos
+need manual `start_s` and `end_s` interval annotations before event precision,
+recall or latency should be reported.
+
+```bash
+python scripts/19_run_temporal_benchmark.py \
+  --classifier_ckpt models/experiments/${RUN_ID}/classification/<classifier_run>/best.pt \
+  --sample_fps 5 \
+  --threshold 0.85
+```

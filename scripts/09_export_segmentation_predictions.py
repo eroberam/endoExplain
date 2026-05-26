@@ -59,6 +59,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--checkpoint", type=Path, required=True)
     p.add_argument("--index_csv", type=Path, default=DEFAULT_INDEX)
     p.add_argument("--output_csv", type=Path, default=None)
+    p.add_argument("--split_csv", type=Path, default=None)
+    p.add_argument("--split", choices=["train", "val", "test"], default=None)
     p.add_argument("--image_size", type=int, default=None)
     p.add_argument("--threshold", type=float, default=0.5)
     p.add_argument("--batch_size", type=int, default=8)
@@ -101,16 +103,22 @@ def _metrics(pred: np.ndarray, target: np.ndarray) -> dict[str, float]:
     }
 
 
+def _input_rows(index_csv: Path, split_csv: Path | None, split: str | None) -> pd.DataFrame:
+    df = pd.read_csv(split_csv if split_csv and split_csv.exists() else index_csv)
+    if split and "split" in df.columns:
+        df = df[df["split"] == split].copy()
+    if "has_mask" in df.columns:
+        df = df[df["has_mask"].astype(bool)].copy()
+    return df.reset_index(drop=True)
+
+
 def main() -> int:
     args = parse_args()
     device = torch.device(args.device or ("cuda" if torch.cuda.is_available() else "cpu"))
     model, ckpt = _load_segmenter(args.checkpoint, device)
     image_size = int(args.image_size or ckpt.get("image_size", 384))
     normalize = bool(ckpt.get("normalize", False))
-    df = pd.read_csv(args.index_csv)
-    if "has_mask" in df.columns:
-        df = df[df["has_mask"].astype(bool)]
-    df = df.reset_index(drop=True)
+    df = _input_rows(args.index_csv, args.split_csv, args.split)
     if df.empty:
         raise SystemExit("no segmentation rows with masks")
 
